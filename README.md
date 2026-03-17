@@ -24,51 +24,24 @@ STEP-5: Read the characters row wise or column wise in the former order to get t
 
 ## PROGRAM
 
-```
-#include <stdio.h>
-#include <string.h>
-int main() {
-    char text[1000];
-    int rails, len;
-    int rail[100][1000];
-    int i, j, row;
-    int dir = 1;   // direction: 1 = down, -1 = up
-    printf("Enter the secret message: ");
-    fgets(text, sizeof(text), stdin);
-    // remove newline
-    text[strcspn(text, "\n")] = '\0';
-    printf("Enter number of rails: ");
-    scanf("%d", &rails);
-    len = strlen(text);
+```python
+def rail_fence_encrypt(text, rails):
+    fence = {i: [] for i in range(rails)}
+    row, dir = 0, 1
+    for ch in text:
+        fence[row].append(ch)
+        if row == 0: 
+            dir = 1
+        elif row == rails - 1: 
+            dir = -1
+        row += dir
+    return "".join("".join(fence[r]) for r in range(rails))
 
-    // initialize matrix
-    for (i = 0; i < rails; i++)
-        for (j = 0; j < len; j++)
-            rail[i][j] = '\0';
 
-    // place characters in zig-zag
-    row = 0;
-    for (j = 0; j < len; j++) {
-        rail[row][j] = text[j];
-
-        if (row == 0)
-            dir = 1;
-        else if (row == rails - 1)
-            dir = -1;
-
-        row += dir;
-    }
-
-    // read row-wise to get cipher text
-    printf("Encrypted Message: ");
-    for (i = 0; i < rails; i++)
-        for (j = 0; j < len; j++)
-            if (rail[i][j] != '\0')
-                printf("%c", rail[i][j]);
-
-    printf("\n");
-    return 0;
-}
+text  = input("Enter the secret message: ")
+rails = int(input("Enter number of rails: "))
+encrypted = rail_fence_encrypt(text, rails)
+print(f"Encrypted Message: {encrypted}")
 
 ```
 
